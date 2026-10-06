@@ -1,0 +1,24 @@
+item,category,min_price,max_price
+paracetamol,medicine,1,3
+metformin,medicine,1,4
+amlodipine,medicine,2,6
+atorvastatin,medicine,4,15
+insulin,medicine,150,900
+azithromycin,medicine,20,60
+cetirizine,medicine,1,4
+pantoprazole,medicine,4,12
+blood test,diagnostic,150,500
+cbc,diagnostic,200,450
+hba1c,diagnostic,300,700
+lipid profile,diagnostic,400,900
+x-ray,diagnostic,250,700
+ecg,diagnostic,150,500
+mri,diagnostic,4000,9000
+ct scan,diagnostic,2500,6500
+consultation,hospital,300,1500
+room charges,hospital,1500,6000
+icu charges,hospital,6000,25000
+nursing,hospital,300,1500
+surgery,hospital,30000,150000
+syringe,hospital,5,25
+gloves,hospital,10,50

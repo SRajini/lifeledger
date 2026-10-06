@@ -1,0 +1,9 @@
+City Care Hospital
+Date: 12/09/2026
+Consultation 1 800
+Blood Test 1 2400
+Paracetamol 500mg x 10 30
+Metformin 500mg x 30 90
+Room Charges 2 4500
+Gloves x 4 600
+Total 12420
