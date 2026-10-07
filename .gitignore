@@ -1,0 +1,32 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Database files
+backend/*.db
+
+# ML generated files
+backend/data/credit_model.joblib
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Flutter
+.dart_tool/
+mobile/.dart_tool/
+build/
+mobile/build/
+
+# IDE
+.idea/
+.vscode/
+
+# Flutter generated files
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
