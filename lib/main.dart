@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String kCurrency = '₹'; // change this to $ or € if you like
 
@@ -35,6 +38,20 @@ class Entry {
     required this.isIncome,
     required this.date,
   });
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'amount': amount,
+        'isIncome': isIncome,
+        'date': date.toIso8601String(),
+      };
+
+  factory Entry.fromJson(Map<String, dynamic> json) => Entry(
+        title: json['title'] as String,
+        amount: (json['amount'] as num).toDouble(),
+        isIncome: json['isIncome'] as bool,
+        date: DateTime.parse(json['date'] as String),
+      );
 }
 
 class HomePage extends StatefulWidget {
@@ -46,6 +63,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Entry> _entries = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString('entries');
+    if (raw == null) return;
+    final list = (jsonDecode(raw) as List)
+        .map((e) => Entry.fromJson(e as Map<String, dynamic>))
+        .toList();
+    if (!mounted) return;
+    setState(() => _entries.addAll(list));
+  }
+
+  Future<void> _save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'entries',
+      jsonEncode(_entries.map((e) => e.toJson()).toList()),
+    );
+  }
 
   double get _income =>
       _entries.where((e) => e.isIncome).fold(0, (sum, e) => sum + e.amount);
@@ -62,6 +104,7 @@ class _HomePageState extends State<HomePage> {
     );
     if (entry != null) {
       setState(() => _entries.insert(0, entry));
+      _save();
     }
   }
 
@@ -87,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text('Balance'),
                   Text(
-                    '$kCurrency${_balance.toStringAsFixed(2)}',
+                    '${_balance < 0 ? '-' : ''}$kCurrency${_balance.abs().toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 12),
@@ -125,7 +168,10 @@ class _HomePageState extends State<HomePage> {
                           child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         direction: DismissDirection.endToStart,
-                        onDismissed: (_) => setState(() => _entries.remove(e)),
+                        onDismissed: (_) {
+                          setState(() => _entries.remove(e));
+                          _save();
+                        },
                         child: ListTile(
                           leading: Icon(
                             e.isIncome
