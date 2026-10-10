@@ -32,3 +32,5 @@ mobile/.flutter-plugins-dependencies
 mobile/.packages
 .vercel
 .env*
+.env.local
+.flutter-plugins-dependencies
